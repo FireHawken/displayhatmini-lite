@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "displayhatmini-lite"
+version = "0.1.1"
+description = "Lightweight, NumPy-free driver for Pimoroni Display HAT Mini"
+readme = "README.md"
+license = "MIT"
+authors = [
+    {name = "Artur Brynka", email = "artur@brynka.pl"}
+]
+keywords = ["raspberry-pi", "pimoroni", "display-hat-mini", "st7789", "luma", "gpio"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: System :: Hardware",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+requires-python = ">=3.9"
+dependencies = [
+    "luma.lcd>=2.10.0",
+    "Pillow>=9.0.0",
+    "RPi.GPIO>=0.7.0",
+    "spidev>=3.5",
+]
+
+[project.optional-dependencies]
+dev = [
+    "build",
+    "twine",
+]
+
+[project.urls]
+Homepage = "https://github.com/FireHawken/pimoroni-display-hat-mini-examples"
+Repository = "https://github.com/FireHawken/pimoroni-display-hat-mini-examples"
+Issues = "https://github.com/FireHawken/pimoroni-display-hat-mini-examples/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
