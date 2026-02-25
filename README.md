@@ -38,6 +38,8 @@ This library provides a **drop-in replacement** using [luma.lcd](https://github.
 | Button X     | 16         |
 | Button Y     | 24         |
 
+Please check [official Pimoroni Display HAT Mini pinout](https://pinout.xyz/pinout/display_hat_mini) for more information.
+
 ## Installation
 
 ### Prerequisites
@@ -220,4 +222,4 @@ MIT License — see [LICENSE](LICENSE) for details.
 ## Acknowledgments
 
 - [luma.lcd](https://github.com/rm-hull/luma.lcd) for the excellent display driver
-- [Pimoroni](https://shop.pimoroni.com/) for the Display HAT Mini hardware
+- [Pimoroni](https://shop.pimoroni.com/products/display-hat-mini) for the Display HAT Mini hardware
