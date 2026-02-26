@@ -61,7 +61,7 @@ dtparam=spi=on
 For smooth, flicker-free backlight dimming, enable kernel PWM by adding this line to `/boot/firmware/config.txt`:
 
 ```ini
-dtoverlay=pwm-2chan,pin=13,func=4,pin2=18,func2=2
+dtoverlay=pwm-2chan,pin2=13,func2=4
 ```
 
 Then reboot. The library will automatically use kernel PWM when available, falling back to software PWM otherwise.

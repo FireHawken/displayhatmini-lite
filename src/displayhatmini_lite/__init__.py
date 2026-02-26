@@ -5,7 +5,7 @@ A NumPy-free replacement for the official displayhatmini library,
 using luma.lcd for display communication.
 """
 
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 
 import atexit
 import os
@@ -141,7 +141,7 @@ class DisplayHATMini:
         Note:
             For flicker-free backlight dimming, enable kernel PWM overlay:
                 Add to /boot/firmware/config.txt:
-                    dtoverlay=pwm-2chan,pin=13,func=4,pin2=18,func2=2
+                    dtoverlay=pwm-2chan,pin2=13,func2=4
                 Then reboot.
 
             For completely flicker-free operation, add a 0.1µF capacitor
