@@ -5,7 +5,7 @@ A NumPy-free replacement for the official displayhatmini library,
 using luma.lcd for display communication.
 """
 
-__version__ = "0.1.4"
+__version__ = "0.1.5"
 
 import atexit
 import os
