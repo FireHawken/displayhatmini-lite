@@ -120,7 +120,7 @@ class DisplayHATMini:
 
     # PWM frequencies
     LED_PWM_FREQ = 2000
-    BACKLIGHT_PWM_FREQ = 2000  # 2 kHz - works well across all brightness levels
+    BACKLIGHT_PWM_FREQ = 1000  # 1 kHz - lower frequency supports dimmer brightness levels
 
     # Kernel PWM configuration (GPIO 13 = PWM1 = channel 1)
     PWM_CHIP = 0
