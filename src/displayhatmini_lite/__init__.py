@@ -5,7 +5,7 @@ A NumPy-free replacement for the official displayhatmini library,
 using luma.lcd for display communication.
 """
 
-__version__ = "0.1.5"
+__version__ = "0.1.6"
 
 import atexit
 import os
@@ -75,10 +75,13 @@ class KernelPWM:
             self._enabled = False
 
     def cleanup(self):
-        """Unexport the PWM channel."""
+        """Set duty cycle to 0 and unexport the PWM channel."""
         if self._exported:
             try:
-                self.disable()
+                # Do NOT call disable() — writing enable=0 stops the BCM2835 PWM
+                # clock and it will not reliably restart on re-enable (kernel 6.x).
+                # Setting duty=0 turns the backlight off while keeping the clock alive.
+                self.set_duty_cycle(0)
                 with open(f"{self.base_path}/unexport", "w") as f:
                     f.write(str(self.channel))
             except (IOError, OSError):
@@ -176,6 +179,18 @@ class DisplayHATMini:
             if KernelPWM.is_available(self.PWM_CHIP, self.PWM_CHANNEL):
                 try:
                     self._kernel_pwm = KernelPWM(self.PWM_CHIP, self.PWM_CHANNEL)
+                    # Always unexport first if the channel is already exported (stale
+                    # state from a previous run).  The unexport+export cycle causes the
+                    # kernel to re-claim GPIO 13 via pinctrl, restoring it to ALT0
+                    # regardless of any prior GPIO.setup() calls that may have changed
+                    # the pin function.  It also gives the PWM clock a clean start.
+                    if os.path.exists(self._kernel_pwm.pwm_path):
+                        try:
+                            with open(f"{self._kernel_pwm.base_path}/unexport", "w") as f:
+                                f.write(str(self._kernel_pwm.channel))
+                            time.sleep(0.05)
+                        except (IOError, OSError):
+                            pass
                     if self._kernel_pwm._export():
                         self._kernel_pwm.set_frequency(self.BACKLIGHT_PWM_FREQ)
                         self._kernel_pwm.set_duty_cycle(100)
@@ -342,8 +357,11 @@ class DisplayHATMini:
         # Turn off LED and backlight
         for pin in (self.LED_R, self.LED_G, self.LED_B):
             GPIO.output(pin, GPIO.HIGH)  # LED off
-        GPIO.setup(self.BACKLIGHT, GPIO.OUT)
-        GPIO.output(self.BACKLIGHT, GPIO.LOW)  # Backlight off
+        if not self._using_kernel_pwm:
+            # When using kernel PWM, GPIO 13 is in ALT0 (PWM) mode — calling
+            # GPIO.setup() here would override that and break the next startup.
+            GPIO.setup(self.BACKLIGHT, GPIO.OUT)
+            GPIO.output(self.BACKLIGHT, GPIO.LOW)  # Backlight off
 
     def __del__(self):
         """Destructor - clean up resources."""
